@@ -7,8 +7,7 @@
 
 class Renderer {
 public:
-// Passing by const reference to avoid copying objects
-    void renderBoard(SDL_Renderer* renderer, Board& board, PieceType type);
+    void renderBoard(SDL_Renderer* renderer, const Board& board);
     void renderPiece(SDL_Renderer* renderer, const Piece& piece);
 };
 

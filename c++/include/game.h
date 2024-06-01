@@ -6,6 +6,12 @@
 #include "board.h"
 #include "renderer.h"
 
+enum MoveDirection {
+    LEFT,
+    RIGHT,
+    DOWN
+};
+
 class Game {
 public:
     Game();
@@ -17,9 +23,12 @@ public:
     void close();
     void stop();
     
+    void movePiece(MoveDirection direction);
+    void rotatePiece();
+    
 private:
     void handleEvents();
-    void render(PieceType type);
+    void render();
     void update();
     
 private:

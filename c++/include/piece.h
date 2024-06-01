@@ -14,10 +14,12 @@ class Piece {
 public:
     Piece();
     Piece(PieceType type);
+    Piece(const Piece& other); // Copy constructor
+    Piece& operator=(const Piece& other); // Copy assignment operator
     ~Piece();
 
 private:
-    void setMatrix();
+    void initMatrix();
 
     const Color red = {255, 0, 0};
     const Color green = {0, 255, 0};
@@ -28,26 +30,31 @@ private:
     const Color cyan = {0, 255, 255};
 
 public:
-    int getHeight() const;
-    int getWidth() const;
-    std::vector<std::vector<int>> getMatrix() const;
-    int x() const;
-    int y() const;
-    Color getColor() const;
+    std::vector<std::vector<int>> getMatrix() const { return _currentPiece; }
+    int getRotation() const { return _currentPieceRotation; }
+    size_t getHeight() const { return _currentPiece.size(); }
+    size_t getWidth() const { return _currentPiece.size(); }
+    Color getColor() const { return _currentPieceColor; }
+    int getX() const { return _x; };
+    int getY() const { return _y; };
+    void setX(int x) { _x = x; };
+    void setY(int y) { _x = y; };
 
     void rotate(bool clockwise = true);
-    void move();
     void fall();
+    void moveLeft();
+    void moveRight();
+    void moveDown();
     
 private:
     // Pieces always fall from the top middle of the board
-    int _currentPieceX = 0;
-    int _currentPieceY = 0;
+    int _x = 0;
+    int _y = 0;
     
     PieceType _currentPieceType;
 
     // Actual piece representation, 4x4 matrix
-    Matrix _currentPiece = std::vector<std::vector<int>>(4, std::vector<int>(4, 0));
+    Matrix _currentPiece;
 
     // Rotation of the piece, 1-4
     int _currentPieceRotation;

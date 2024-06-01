@@ -1,55 +1,48 @@
 #include "renderer.h"
 #include<iostream>
 
+void Renderer::renderBoard(SDL_Renderer* renderer, const Board& board) {
+    for (size_t y = 0; y < board.getHeight(); y++) {
+        for (size_t x = 0; x < board.getWidth(); x++) {
+            auto cell = board.getMatrix()[static_cast<int>(y)][static_cast<int>(x)];
+            int occupied = cell.first;
+            Color color = cell.second;
 
-// TODO: Make const ref in future
-void Renderer::renderBoard(SDL_Renderer* renderer, Board& board, PieceType type) {
-    // FOR DEBUGGING, LET'S CREATE A NEW BOARD INSTEAD OF USING THE ONE PASSED AS ARGUMENT
-    // Add pieces to the board
-    std::cout << "Creating a new piece" << std::endl;
-    Piece piece(type);
-    // board.addPiece(piece);
-
-    // Render the board
-    // std::vector<Piece> pieces = board.getPieces();
-    
-    // if (pieces.size() == 0) {
-    //     return;
-    // }
-
-    // for (size_t i = 0; i < pieces.size(); i++) {
-        renderPiece(renderer, piece);
-    // }
-}
-
-void Renderer::renderPiece(SDL_Renderer* renderer, const Piece& piece) {
-    Color color = piece.getColor();
-    int x = piece.x();
-    int y = piece.y(); 
-    
-    // Render the piece
-    for (int i = 0; i < piece.getHeight() -1; i++) {
-        for (int j = 0; j < piece.getWidth() -1; j++) {
-
-            // Render the piece
-            if (piece.getMatrix()[i][j] == 1) {
-                int xPosition = x + j;
-                int yPosition = y + i;
-
-                // Render the piece, SDL
+            if (occupied) {
+                // Piece block
                 SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, 255);
-                // Draw the rectangle
-                SDL_Rect rect = {xPosition * 30, yPosition * 30, 30, 30};
+                SDL_Rect rect = { static_cast<int>(x) * 30, static_cast<int>(y) * 30, 30, 30 };
                 SDL_RenderFillRect(renderer, &rect);
-
+                
                 // Draw the border
                 SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
                 SDL_RenderDrawRect(renderer, &rect);
             }
         }
     }
+}
+
+void Renderer::renderPiece(SDL_Renderer* renderer, const Piece& piece) {
+    Color color = piece.getColor();
+    int x = piece.getX();
+    int y = piece.getY(); 
     
     // Render the piece
-    SDL_RenderPresent(renderer);
-    SDL_Delay(500);
+    for (size_t i = 0; i < piece.getHeight(); i++) {
+        for (size_t j = 0; j < piece.getWidth(); j++) {
+            if (piece.getMatrix()[static_cast<int>(i)][static_cast<int>(j)] == 1) {
+                int xPosition = x + j;
+                int yPosition = y + i;
+
+                // Piece block
+                SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, 255);
+                SDL_Rect rect = {xPosition * 30, yPosition * 30, 30, 30};
+                SDL_RenderFillRect(renderer, &rect);
+
+                // Border
+                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+                SDL_RenderDrawRect(renderer, &rect);
+            }
+        }
+    }
 }

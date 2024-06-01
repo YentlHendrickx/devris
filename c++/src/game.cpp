@@ -8,6 +8,16 @@ Game::~Game() {
     close();
 }
 
+void Game::close() {
+    stop();
+
+    SDL_DestroyRenderer(_renderer);
+    SDL_DestroyWindow(_window);
+    _window = nullptr;
+    _renderer = nullptr;
+    SDL_Quit();
+}
+
 bool Game::init() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cout << "SDL: could not be initialized" << SDL_GetError() << std::endl;
@@ -32,22 +42,11 @@ bool Game::init() {
 }
 
 void Game::run() {
-    int counter = 0;
-
     while (_running) {
         handleEvents();
         // update();
-        render(static_cast<PieceType>(counter % 7));
-        counter++; 
+        render();
     }
-}
-
-void Game::close() {
-    SDL_DestroyRenderer(_renderer);
-    SDL_DestroyWindow(_window);
-    _window = nullptr;
-    _renderer = nullptr;
-    SDL_Quit();
 }
 
 void Game::stop() {
@@ -55,18 +54,40 @@ void Game::stop() {
 }
 
 void Game::handleEvents() {
-    _inputHandler.handleInput(_running);
-    
-    // TODO: This should not be here
-    // SDL_Delay(16);
+    _inputHandler.handleInput(*this);
 }
 
-void Game::render(PieceType type) {
+void Game::render() {
     SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
     SDL_RenderClear(_renderer);
     SDL_RenderPresent(_renderer);
 
-    _gameRenderer.renderBoard(_renderer, _board, type);
+    _gameRenderer.renderBoard(_renderer, _board);
+    _gameRenderer.renderPiece(_renderer, _board.currentPiece());
+    SDL_RenderPresent(_renderer);
+    SDL_Delay(150);
 }
 
-void Game::update() {}
+// Main game update loop
+void Game::update() {
+    
+}
+
+void Game::movePiece(MoveDirection direction) {
+    // TODO: Collision detection!
+    switch (direction) {
+        case MoveDirection::LEFT:
+            _board.currentPiece().moveLeft();
+            break;
+        case MoveDirection::RIGHT:
+            _board.currentPiece().moveRight();
+            break;
+        case MoveDirection::DOWN:
+            _board.currentPiece().moveDown();
+            break;
+    }
+}
+
+void Game::rotatePiece() {
+    _board.currentPiece().rotate();
+}

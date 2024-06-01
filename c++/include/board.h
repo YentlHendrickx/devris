@@ -6,7 +6,7 @@
 constexpr int DEF_BOARD_WIDTH = 10;
 constexpr int DEF_BOARD_HEIGHT = 20;
 
-// typedef std::vector<std::vector<int, Color>> BoardMatrix;
+typedef std::vector<std::vector<std::pair<int, Color>>> BoardMatrix;
 
 class Board {
 public:
@@ -15,17 +15,17 @@ public:
     ~Board();
 
 public:
-    bool init();
+    size_t getWidth() const { return _gameBoard[0].size(); }
+    size_t getHeight() const { return _gameBoard.size(); }
+    BoardMatrix getMatrix() const { return _gameBoard; }
+    
+    void init();
     void clear();
-    int getHeight() const;
-    int getWidth() const;
-    std::vector<Piece> getPieces() const;
     void addPiece(const Piece& piece);
+    Piece& currentPiece() { return _currentPiece; }
 
 private:
-    // BoardMatrix _Placedboard;
-
-    std::vector<Piece> _pieces;
+    BoardMatrix _gameBoard;
     Piece _currentPiece;
     Piece _nextPiece;
 
