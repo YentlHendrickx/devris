@@ -33,20 +33,23 @@ void Board::clear() {
     }
 }
 
+void Board::nextPiece(Piece &piece) {
+    piece = _nextPiece;
+    
+    // Random number between 0 and 6
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, 6);
+    
+    _nextPiece = Piece(static_cast<PieceType>(dis(gen)));
+}
+
 void Board::addPiece(const Piece& piece) {
     auto matrix = piece.getMatrix();
     int pieceX = piece.getX();
     int pieceY = piece.getY();
     Color pieceColor = piece.getColor();
     
-    std::cout << "Piece X: " << pieceX << " Piece Y: " << pieceY << std::endl;
-    for (size_t i = 0; i < 4; i++) {
-        for (size_t j = 0; j < 4; j++) {
-            std::cout << matrix[static_cast<int>(i)][static_cast<int>(j)] << " ";
-        }
-        std::cout << std::endl;
-    }
-
     for (size_t i = 0; i < 4; i++) {
         for (size_t j = 0; j < 4; j++) {
             if (matrix[static_cast<int>(i)][static_cast<int>(j)] == 1) {

@@ -1,6 +1,7 @@
 #ifndef BOARD_H
 #define BOARD_H
 
+#include <vector>
 #include "piece.h"
 
 constexpr int DEF_BOARD_WIDTH = 10;
@@ -23,6 +24,7 @@ public:
     void clear();
     void addPiece(const Piece& piece);
     Piece& currentPiece() { return _currentPiece; }
+    void nextPiece(Piece &piece);
 
 private:
     BoardMatrix _gameBoard;

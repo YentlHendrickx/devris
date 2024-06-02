@@ -1,14 +1,19 @@
 #ifndef PIECE_H
 #define PIECE_H
+
 #include <vector>
+#include "pieces.h"
+
+// Forward declaration
+class Board;
 
 enum PieceType { oPiece, iPiece, sPiece, zPiece, lPiece, jPiece, tPiece, unknownPiece };
+
 struct Color {
     int r;
     int g;
     int b;
 };
-typedef std::vector<std::vector<int>> Matrix;
 
 class Piece {
 public:
@@ -21,47 +26,53 @@ public:
 private:
     void initMatrix();
 
+    const Color yellow = {255, 255, 0};
+    const Color cyan = {0, 255, 255};
     const Color red = {255, 0, 0};
     const Color green = {0, 255, 0};
-    const Color blue = {0, 0, 255};
-    const Color yellow = {255, 255, 0};
     const Color orange = {255, 165, 0};
+    const Color pink = {255, 192, 203};
     const Color purple = {128, 0, 128};
-    const Color cyan = {0, 255, 255};
+    const Color white = {255, 255, 255};
 
 public:
-    std::vector<std::vector<int>> getMatrix() const { return _currentPiece; }
-    int getRotation() const { return _currentPieceRotation; }
-    size_t getHeight() const { return _currentPiece.size(); }
-    size_t getWidth() const { return _currentPiece.size(); }
-    Color getColor() const { return _currentPieceColor; }
+    PieceMatrix getMatrix() const { return _piece; }
+    int getRotation() const { return _pieceRotation; }
+    size_t getHeight() const { return _piece.size(); }
+    size_t getWidth() const { return _piece.size(); }
+    Color getColor() const { return _pieceColor; }
     int getX() const { return _x; };
     int getY() const { return _y; };
+    void setIsFalling(bool falling) { _pieceFalling = falling; }
     void setX(int x) { _x = x; };
     void setY(int y) { _x = y; };
-
+    
     void rotate(bool clockwise = true);
-    void fall();
-    void moveLeft();
-    void moveRight();
-    void moveDown();
+    bool isFalling() const { return _pieceFalling; }
+
+    void moveLeft(Board &board);
+    void moveRight(Board &board);
+    void moveDown(Board &board);
     
 private:
     // Pieces always fall from the top middle of the board
     int _x = 0;
     int _y = 0;
     
-    PieceType _currentPieceType;
+    PieceType _pieceType;
 
     // Actual piece representation, 4x4 matrix
-    Matrix _currentPiece;
+    PieceMatrix _piece;
 
     // Rotation of the piece, 1-4
-    int _currentPieceRotation;
-    Color _currentPieceColor = {0, 0, 0};
+    int _pieceRotation = 1;
+    Color _pieceColor = {0, 0, 0};
 
     // Default we set it to true, so it will automatically fall
     bool _pieceFalling = true;
+
+private:
+    bool canMoveTo(int newX, int newY, Board &board);
 };
 
 #endif

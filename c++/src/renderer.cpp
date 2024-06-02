@@ -37,6 +37,7 @@ void Renderer::renderPiece(SDL_Renderer* renderer, const Piece& piece) {
                 // Piece block
                 SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, 255);
                 SDL_Rect rect = {xPosition * 30, yPosition * 30, 30, 30};
+
                 SDL_RenderFillRect(renderer, &rect);
 
                 // Border

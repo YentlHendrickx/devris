@@ -44,7 +44,7 @@ bool Game::init() {
 void Game::run() {
     while (_running) {
         handleEvents();
-        // update();
+        update();
         render();
     }
 }
@@ -69,21 +69,26 @@ void Game::render() {
 }
 
 // Main game update loop
-void Game::update() {
-    
+void Game::update() { 
+    // if (_board.currentPiece().isFalling()) {
+    //     _board.currentPiece().moveDown(_board);
+    // } else {
+    if (!_board.currentPiece().isFalling()) {
+        _board.addPiece(_board.currentPiece());
+        _board.nextPiece(_board.currentPiece());
+    }
 }
 
 void Game::movePiece(MoveDirection direction) {
-    // TODO: Collision detection!
     switch (direction) {
         case MoveDirection::LEFT:
-            _board.currentPiece().moveLeft();
+            _board.currentPiece().moveLeft(_board);
             break;
         case MoveDirection::RIGHT:
-            _board.currentPiece().moveRight();
+            _board.currentPiece().moveRight(_board);
             break;
         case MoveDirection::DOWN:
-            _board.currentPiece().moveDown();
+            _board.currentPiece().moveDown(_board);
             break;
     }
 }

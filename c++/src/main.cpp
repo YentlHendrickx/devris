@@ -9,7 +9,6 @@ int main(int argc, char* argv[]) {
     }
     
     std::cout << "Game initialized" << std::endl;
-    
     game.run();
     
     // Normally not needed, but SDL is a bit special
