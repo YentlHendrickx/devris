@@ -45,7 +45,7 @@ public:
     int getY() const { return _y; };
     void setIsFalling(bool falling) { _pieceFalling = falling; }
     void setX(int x) { _x = x; };
-    void setY(int y) { _x = y; };
+    void setY(int y) { _y = y; };
     
     void rotate(bool clockwise = true);
     bool isFalling() const { return _pieceFalling; }
@@ -53,6 +53,7 @@ public:
     void moveLeft(Board &board);
     void moveRight(Board &board);
     void moveDown(Board &board);
+    bool canMoveTo(int newX, int newY, Board &board);
     
 private:
     // Pieces always fall from the top middle of the board
@@ -70,9 +71,6 @@ private:
 
     // Default we set it to true, so it will automatically fall
     bool _pieceFalling = true;
-
-private:
-    bool canMoveTo(int newX, int newY, Board &board);
 };
 
 #endif

@@ -19,12 +19,14 @@ public:
     size_t getWidth() const { return _gameBoard[0].size(); }
     size_t getHeight() const { return _gameBoard.size(); }
     BoardMatrix getMatrix() const { return _gameBoard; }
+    void printBoard();
     
     void init();
     void clear();
     void addPiece(const Piece& piece);
     Piece& currentPiece() { return _currentPiece; }
-    void nextPiece(Piece &piece);
+    void nextPiece();
+    void checkLines();
 
 private:
     BoardMatrix _gameBoard;

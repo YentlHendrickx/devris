@@ -32,48 +32,26 @@ Piece& Piece::operator=(const Piece& other) { // Copy assignment operator
 Piece::~Piece() {}
 
 void Piece::moveLeft(Board &board) {
-    for (int i = 0; i < _piece.size(); ++i) {
-        for (int j = 0; j < _piece[i].size(); ++j) {
-            // If moving left would go out of bounds or hit a block, don't move
-            if (_piece[i][j] != 0 && (_x + j - 1 < 0 || !canMoveTo(_x + j - 1, _y + i, board))) {
-                return;
-            }
-        }
-    }
-    _x--;
+    if (canMoveTo(_x - 1, _y, board))
+        _x--;
 }
 
 void Piece::moveRight(Board &board) {
-    int boardWidth = board.getWidth();
-
-    for (int i = 0; i < _piece.size(); ++i) {
-        for (int j = 0; j < _piece[i].size(); ++j) {
-            if (_piece[i][j] != 0 && (_x + j + 1 >= boardWidth || !canMoveTo(_x + j + 1, _y + i, board))) {
-                return;
-            }
-        }
+    if (canMoveTo(_x + 1, _y, board)) {
+        _x++;
     }
-
-    _x++;
 }
 
 void Piece::moveDown(Board &board) {
-    int boardHeight = board.getHeight();
-
-    for (int i = 0; i < _piece.size(); ++i) {
-        for (int j = 0; j < _piece[i].size(); ++j) {
-            if (_piece[i][j] != 0 && (_y + i + 1 >= boardHeight || !canMoveTo(_x + j, _y + i + 1, board))) {
-                std::cout << "Piece has landed\n" << std::endl;
-                _pieceFalling = false;                
-                return;
-            }
-        }
+    if (canMoveTo(_x, _y + 1, board)) {
+        _y++;
+    } else {
+        _pieceFalling = false;
+        std::cout << "Piece has landed\n" << std::endl;
     }
-
-    _y++;
 }
 
-bool Piece::canMoveTo(int newX, int newY, Board &board)  {
+bool Piece::canMoveTo(int newX, int newY, Board &board) {
     int boardWidth = board.getWidth();
     int boardHeight = board.getHeight();
     auto boardMatrix = board.getMatrix();
@@ -84,7 +62,13 @@ bool Piece::canMoveTo(int newX, int newY, Board &board)  {
                 int boardX = newX + j;
                 int boardY = newY + i;
 
-                if (boardX < 0 || boardX >= boardWidth || boardY < 0 || boardY >= boardHeight || boardMatrix[boardY][boardX].first != 0) {
+                // Check if the position is out of bounds
+                if (boardX < 0 || boardX >= boardWidth || boardY < 0 || boardY >= boardHeight) {
+                    return false;
+                }
+
+                // Check if the position is already occupied
+                if (boardMatrix[boardY][boardX].first != 0) {
                     return false;
                 }
             }
